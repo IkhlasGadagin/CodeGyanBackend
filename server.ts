@@ -1,7 +1,12 @@
-console.log("Hello World welcome to the note");
+import app from "./src/app";
 
-function ikhlas(){
-    console.log("Hello World welcome to the note");
-}
+const startServer = () => {
+    
+    const port = process.env.PORT || 3000;
 
-ikhlas();
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    });
+};
+
+startServer();
