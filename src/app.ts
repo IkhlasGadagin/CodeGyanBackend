@@ -3,7 +3,8 @@ import globalErrorHandler from "./middlewares/globalErrorHandler";
 import userRouter from "./user/useRouter";
 // import createHttpError from "http-errors";
 const app = express();
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res, next) => {
 
 
