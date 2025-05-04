@@ -5,15 +5,16 @@ import multer from "multer";
 
 const bookRouter = express.Router();
 
-const upload = multer({ 
-    dest:path.resolve(__dirname, '../../public/data/uploads'),
-    limits: {fileSize: 3e7},
+const upload = multer({
+    dest: path.resolve(__dirname, '../../public/data/uploads'),
+    limits: { fileSize: 3e7 },
     // storage: multer.memoryStorage() 
 
 });
 
 
-bookRouter.post("/create", createBook);
+bookRouter.post("/create", upload.fields([{ name: "coverImage", maxCount: 1 },
+{ name: "file", maxCount: 1 }]), createBook);
 bookRouter.get("/getallbooks", getAllBooks);
 bookRouter.get("/:id", getBookById);
 bookRouter.put("/:id", updateBook);
