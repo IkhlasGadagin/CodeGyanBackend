@@ -10,5 +10,6 @@ export interface IBook {
     createdAt: Date;
     updatedAt: Date;
     description: string;
+    price: number;
 }
 
