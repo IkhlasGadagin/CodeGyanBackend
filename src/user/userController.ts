@@ -39,7 +39,7 @@ const registerUser = async (req: Request, res: Response, next: NextFunction) => 
 
     try {
         const token = sign({ userId: newUser._id }, config.jwtSecrete as string, { expiresIn: "7d" });
-        res.json({
+        res.status(201).json({
             accessToken: token,
             message: "User registered successfully Ikhlas"
         });
