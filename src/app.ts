@@ -1,6 +1,7 @@
 import express from "express";
 import globalErrorHandler from "./middlewares/globalErrorHandler";
 import userRouter from "./user/useRouter";
+import bookRouter from "./book/bookRouter";
 // import createHttpError from "http-errors";
 const app = express();
 app.use(express.json());
@@ -16,6 +17,7 @@ app.get("/", (req, res, next) => {
 });
 
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/books", bookRouter )
 
 
 //Globat Error declaration
