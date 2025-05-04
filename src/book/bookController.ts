@@ -5,22 +5,22 @@ import Book from "./bookModel";
 
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
-    const { title, author, description, price } = req.body;
+    // const { title, description, price } = req.body;
+console.log("files uploaded",req.files)
+    // if (!title  || !description || !price) {
+    //     const error = createHttpError(400, "All fields are required");
+    //     return next(error);
+    // }
 
-    if (!title || !author || !description || !price) {
-        const error = createHttpError(400, "All fields are required");
-        return next(error);
-    }
-
-    try {
-        const book = await Book.create({ title, author, description, price });
-        res.status(201).json({
-            message: "Book created successfully",
-            book
-        });
-    } catch (error) {
-        return next(createHttpError(500, "Error while creating book"))
-    }
+    // try {
+    //     const book = await Book.create({ title,  description, price });
+    //     res.status(201).json({
+    //         message: "Book created successfully",
+    //         book
+    //     });
+    // } catch (error) {
+    //     return next(createHttpError(500, "Error while creating book"))
+    // }
 }
 
 const getAllBooks = async (req: Request, res: Response, next: NextFunction) => {
