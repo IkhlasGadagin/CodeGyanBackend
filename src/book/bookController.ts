@@ -1,26 +1,42 @@
 import { Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
 import Book from "./bookModel";
+import cloudinary from "../config/cloudinary";
+import path from "node:path";
 
 
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
-    // const { title, description, price } = req.body;
-console.log("files uploaded",req.files)
-    // if (!title  || !description || !price) {
-    //     const error = createHttpError(400, "All fields are required");
-    //     return next(error);
-    // }
+    console.log("files uploaded", req.files)
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+    const coverImageMimeType = files?.coverImage[0].mimetype.split("/").at(-1);
 
-    // try {
-    //     const book = await Book.create({ title,  description, price });
-    //     res.status(201).json({
-    //         message: "Book created successfully",
-    //         book
-    //     });
-    // } catch (error) {
-    //     return next(createHttpError(500, "Error while creating book"))
-    // }
+    const fileName = files?.coverImage[0].filename;
+    const filePath = path.resolve(__dirname, '../../public/data/uploads',fileName);
+
+    // const { title, description, price } = req.body;
+    const uploadResult = await cloudinary.uploader.upload(filePath, {
+        filename_override: fileName,
+        folder: "book-covers",
+        format: coverImageMimeType,
+    })
+
+
+    const bookFileName = files?.file[0].filename;
+    const bookFilePath = path.resolve(__dirname, '../../public/data/uploads',bookFileName);
+    // const bookFileMimeType = files?.book[0].mimetype.split("/").at(-1);
+
+    const bookFileUpload = await cloudinary.uploader.upload(bookFilePath,{
+        resource_type: "raw",
+        filename_override: bookFileName,
+        folder: "book-pdf",
+        format: "pdf",
+    })
+console.log(bookFileUpload, "bookFileUpload");
+res.json({});
+
+
+    
 }
 
 const getAllBooks = async (req: Request, res: Response, next: NextFunction) => {
