@@ -11,7 +11,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 //take the image and upload it to cloudinary
 //take the pdf and upload it to cloudinary
 //save the image and pdf url in the database
-
+const {title, description, price, coverImage, pdf}=req.body
 
 
     console.log("files uploaded", req.files)
@@ -41,10 +41,19 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
         folder: "book-pdf",
         format: "pdf",
     })
-    
+
     console.log(uploadResult, "the result from the cloudinary image upload");
     console.log(bookFileUpload, "the result from the cloudinary pdf upload");
-    
+
+    //saving the image and pdf url in the database
+    const newBook = await Book.create({
+        title,
+        description,
+        price,
+        author:"68166adf5f31b8c90b83bf2c",
+        coverImage: uploadResult.secure_url,
+        pdf: bookFileUpload.secure_url,
+    })
     res.json({});
    } catch (error) {
     console.log(error, "error in uploading the image to cloudinary");
