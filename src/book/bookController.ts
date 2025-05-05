@@ -7,6 +7,13 @@ import path from "node:path";
 
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
+//STEPS take file from multer take the file with the variable names (coverImage and file) name and save it in the public folder
+//take the image and upload it to cloudinary
+//take the pdf and upload it to cloudinary
+//save the image and pdf url in the database
+
+
+
     console.log("files uploaded", req.files)
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
     const coverImageMimeType = files?.coverImage[0].mimetype.split("/").at(-1);
@@ -23,30 +30,34 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
          folder: "book-covers",
          format: coverImageMimeType,
      })
+     const bookFileName = files?.file[0].filename;
+     const bookFilePath = path.resolve(__dirname, '../../public/data/uploads',bookFileName);
+
+     
+
+     const bookFileUpload = await cloudinary.uploader.upload(bookFilePath,{
+        resource_type: "raw",
+        filename_override: bookFileName,
+        folder: "book-pdf",
+        format: "pdf",
+    })
+    
+    console.log(uploadResult, "the result from the cloudinary image upload");
+    console.log(bookFileUpload, "the result from the cloudinary pdf upload");
+    
+    res.json({});
    } catch (error) {
     console.log(error, "error in uploading the image to cloudinary");
     return next(createHttpError(500, "Error in uploading the image to cloudinary"));
    }
 
     // taking the pdf and saving it in the public folder
-    const bookFileName = files?.file[0].filename;
-    const bookFilePath = path.resolve(__dirname, '../../public/data/uploads',bookFileName);
+  
     // const bookFileMimeType = files?.book[0].mimetype.split("/").at(-1);
 
-    //uploading the pdf to cloudinary
-   try {
-     const bookFileUpload = await cloudinary.uploader.upload(bookFilePath,{
-         resource_type: "raw",
-         filename_override: bookFileName,
-         folder: "book-pdf",
-         format: "pdf",
-     })
-   } catch (error) {
-    console.log(error, "error in uploading the pdf to cloudinary");
-    return next(createHttpError(500, "Error in uploading the pdf to cloudinary"));
-   }
-console.log(bookFileUpload, "bookFileUpload");
-res.json({});
+  
+// console.log(bookFileUpload, "bookFileUpload");
+
 
 
     
