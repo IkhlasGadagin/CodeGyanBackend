@@ -34,12 +34,17 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
     // const bookFileMimeType = files?.book[0].mimetype.split("/").at(-1);
 
     //uploading the pdf to cloudinary
-    const bookFileUpload = await cloudinary.uploader.upload(bookFilePath,{
-        resource_type: "raw",
-        filename_override: bookFileName,
-        folder: "book-pdf",
-        format: "pdf",
-    })
+   try {
+     const bookFileUpload = await cloudinary.uploader.upload(bookFilePath,{
+         resource_type: "raw",
+         filename_override: bookFileName,
+         folder: "book-pdf",
+         format: "pdf",
+     })
+   } catch (error) {
+    console.log(error, "error in uploading the pdf to cloudinary");
+    return next(createHttpError(500, "Error in uploading the pdf to cloudinary"));
+   }
 console.log(bookFileUpload, "bookFileUpload");
 res.json({});
 
