@@ -54,7 +54,10 @@ const {title, description, price, coverImage, pdf}=req.body
         coverImage: uploadResult.secure_url,
         pdf: bookFileUpload.secure_url,
     })
-    res.json({});
+    res.status(201).json({
+        message: "Book created successfully",
+        newBook
+    });
    } catch (error) {
     console.log(error, "error in uploading the image to cloudinary");
     return next(createHttpError(500, "Error in uploading the image to cloudinary"));
