@@ -17,11 +17,16 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 
     // const { title, description, price } = req.body;
     //uploading the image to cloudinary
-    const uploadResult = await cloudinary.uploader.upload(filePath, {
-        filename_override: fileName,
-        folder: "book-covers",
-        format: coverImageMimeType,
-    })
+   try {
+     const uploadResult = await cloudinary.uploader.upload(filePath, {
+         filename_override: fileName,
+         folder: "book-covers",
+         format: coverImageMimeType,
+     })
+   } catch (error) {
+    console.log(error, "error in uploading the image to cloudinary");
+    return next(createHttpError(500, "Error in uploading the image to cloudinary"));
+   }
 
     // taking the pdf and saving it in the public folder
     const bookFileName = files?.file[0].filename;
