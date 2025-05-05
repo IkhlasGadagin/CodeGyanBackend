@@ -11,21 +11,24 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
     const coverImageMimeType = files?.coverImage[0].mimetype.split("/").at(-1);
 
+    //taking the image and saving it in the public folder
     const fileName = files?.coverImage[0].filename;
     const filePath = path.resolve(__dirname, '../../public/data/uploads',fileName);
 
     // const { title, description, price } = req.body;
+    //uploading the image to cloudinary
     const uploadResult = await cloudinary.uploader.upload(filePath, {
         filename_override: fileName,
         folder: "book-covers",
         format: coverImageMimeType,
     })
 
-
+    // taking the pdf and saving it in the public folder
     const bookFileName = files?.file[0].filename;
     const bookFilePath = path.resolve(__dirname, '../../public/data/uploads',bookFileName);
     // const bookFileMimeType = files?.book[0].mimetype.split("/").at(-1);
 
+    //uploading the pdf to cloudinary
     const bookFileUpload = await cloudinary.uploader.upload(bookFilePath,{
         resource_type: "raw",
         filename_override: bookFileName,
