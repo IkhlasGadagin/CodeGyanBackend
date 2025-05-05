@@ -3,7 +3,7 @@ import createHttpError from "http-errors";
 import Book from "./bookModel";
 import cloudinary from "../config/cloudinary";
 import path from "node:path";
-
+import fs from "node:fs";
 
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
@@ -11,10 +11,12 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 //take the image and upload it to cloudinary
 //take the pdf and upload it to cloudinary
 //save the image and pdf url in the database
-const {title, description, price, coverImage, pdf}=req.body
+//delete the file from the public folder fs
+const {title, description, price, genre}=req.body
+console.log(title, description, price, genre, "the data from the body");
 
 
-    console.log("files uploaded", req.files)
+    // console.log("files uploaded", req.files)
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
     const coverImageMimeType = files?.coverImage[0].mimetype.split("/").at(-1);
 
@@ -42,21 +44,29 @@ const {title, description, price, coverImage, pdf}=req.body
         format: "pdf",
     })
 
-    console.log(uploadResult, "the result from the cloudinary image upload");
-    console.log(bookFileUpload, "the result from the cloudinary pdf upload");
+    // console.log(uploadResult, "the result from the cloudinary image upload");
+    // console.log(bookFileUpload, "the result from the cloudinary pdf upload");
 
-    //saving the image and pdf url in the database
+   // saving the image and pdf url in the database
     const newBook = await Book.create({
         title,
         description,
         price,
         author:"68166adf5f31b8c90b83bf2c",
         coverImage: uploadResult.secure_url,
-        pdf: bookFileUpload.secure_url,
+        file: bookFileUpload.secure_url,
+        genre:genre,
     })
+
+   try {
+     await fs.promises.unlink(filePath);
+     await fs.promises.unlink(bookFilePath);
+   } catch (error) {
+   return next(createHttpError(500, "Error in deleting the file from the public folder"))    
+   }
     res.status(201).json({
         message: "Book created successfully",
-        newBook
+        id : newBook._id
     });
    } catch (error) {
     console.log(error, "error in uploading the image to cloudinary");
