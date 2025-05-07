@@ -54,10 +54,11 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
     return next(createHttpError(401, "Unauthorized: No token provided"));
   }
 
-  const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = verify(token, config.jwtSecrete as string) as JwtPayload;
+    const parsedToken = authHeader.split(" ")[1];
+
+    const decoded = verify(parsedToken, config.jwtSecrete as string) as JwtPayload;
 
     if (!decoded || !decoded.userId) {
       return next(createHttpError(401, "Invalid token payload"));
