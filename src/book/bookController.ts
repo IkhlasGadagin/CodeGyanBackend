@@ -196,19 +196,47 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
 const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
-    try {
-        const book = await Book.findByIdAndDelete(id);
-        if (!book) {
-            const error = createHttpError(404, "Book not found with this id");
-            return next(error);
-        }
-        res.json({
-            message: "Book deleted successfully",
-            book
-        });
-    } catch (error) {
-        return next(createHttpError(500, "Error while deleting book"))
+    const book = await Book.findOne({_id:id})
+    if(!book){
+        const error = createHttpError(404, "Book not found with this id");
+        return next(error);
     }
+    //check Access
+    const _req = req as AuthRequest;
+    if(book.author.toString() !== _req.userIdi){
+        const error = createHttpError(403, "You are not authorized to delete this book");
+        return next(error);
+    }
+    
+    //delete the book from the cloudinary
+    // book-covers/bkfwi5nv8eok51ernlqf
+    // https://res.cloudinary.com/dbket10ds/image/upload/v1746632116/book-covers/oyjmfuxu2x5xe46mhhdr.png
+    const coverFileSplit = book.coverImage.split("/")
+    console.log(coverFileSplit, "the cover file split");
+    
+    // await cloudinary.uploader.destroy(book.coverImage);
+    // await cloudinary.uploader.destroy(book.file);
+
+    // //delete the book from the database
+    // await Book.findByIdAndDelete(id);
+
+    // try {
+    //     const book = await Book.findByIdAndDelete(id);
+    //     if (!book) {
+    //         const error = createHttpError(404, "Book not found with this id");
+    //         return next(error);
+    //     }
+    //     res.json({
+    //         message: "Book deleted successfully",
+    //         book
+    //     });
+    // } catch (error) {
+    //     return next(createHttpError(500, "Error while deleting book"))
+    // }
+    res.status(200).json({
+        message: "Book deleted successfully",
+        book
+    });
 }
 
 export { createBook, getAllBooks, getBookById, updateBook, deleteBook };
