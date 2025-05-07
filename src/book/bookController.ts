@@ -50,14 +50,15 @@ console.log(req.files, "the files from the request");
     // console.log(bookFileUpload, "the result from the cloudinary pdf upload");
 
    // saving the image and pdf url in the database
-   const userId = (req as AuthRequest).userIdi;
-   console.log(bookFileName,bookFilePath, userId, "From The middlewaare /////////////");
+//    const userId = (req as AuthRequest).userIdi;
+const _req = req as AuthRequest;
+   console.log(_req.userIdi, "From The middlewaare /////////////");
    
     const newBook = await Book.create({
         title,
         description,
         price,
-        author:"68166adf5f31b8c90b83bf2c",
+        author:_req.userIdi,
         coverImage: uploadResult.secure_url,
         file: bookFileUpload.secure_url,
         genre:genre,
