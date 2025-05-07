@@ -4,6 +4,7 @@ import Book from "./bookModel";
 import cloudinary from "../config/cloudinary";
 import path from "node:path";
 import fs from "node:fs";
+import { AuthRequest } from "../middlewares/authenticate";
 
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
@@ -15,6 +16,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 const {title, description, price, genre}=req.body
 console.log(title, description, price, genre, "the data from the body");
 
+console.log(req.files, "the files from the request");
 
     // console.log("files uploaded", req.files)
     const files = req.files as { [fieldname: string]: Express.Multer.File[] };
@@ -48,6 +50,9 @@ console.log(title, description, price, genre, "the data from the body");
     // console.log(bookFileUpload, "the result from the cloudinary pdf upload");
 
    // saving the image and pdf url in the database
+//    const userId = (req as AuthRequest).userId;
+   console.log(bookFileName,bookFilePath, "From The middlewaare ");
+   
     const newBook = await Book.create({
         title,
         description,
