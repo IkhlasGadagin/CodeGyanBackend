@@ -93,6 +93,7 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 
 const getAllBooks = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        //get all books from the database the Pagination is the good approach
         const books = await Book.find();
         res.json({
             message: "Books fetched successfully",
