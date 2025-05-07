@@ -19,6 +19,6 @@ bookRouter.get("/getallbooks", getAllBooks);
 bookRouter.get("/:id", getBookById);
 bookRouter.put("/:id",authenticate, upload.fields([{ name: "coverImage", maxCount: 1 },
 { name: "file", maxCount: 1 }]), updateBook);
-bookRouter.delete("/:id", deleteBook);
+bookRouter.delete("/:id",authenticate, deleteBook);
 
 export default bookRouter;
