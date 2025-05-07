@@ -211,6 +211,17 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
     //delete the book from the cloudinary
     // book-covers/bkfwi5nv8eok51ernlqf
     // https://res.cloudinary.com/dbket10ds/image/upload/v1746632116/book-covers/oyjmfuxu2x5xe46mhhdr.png
+    /* [
+  'https:',
+  '',
+  'res.cloudinary.com',
+  'dbket10ds',
+  'image',
+  'upload',
+  'v1746632116',
+  'book-covers',
+  'oyjmfuxu2x5xe46mhhdr.png'
+] the cover file split */
     const coverFileSplit = book.coverImage.split("/")
     console.log(coverFileSplit, "the cover file split");
     
