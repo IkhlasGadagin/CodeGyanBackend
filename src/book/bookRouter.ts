@@ -17,7 +17,8 @@ bookRouter.post("/create", authenticate, upload.fields([{ name: "coverImage", ma
 { name: "file", maxCount: 1 }]), createBook);
 bookRouter.get("/getallbooks", getAllBooks);
 bookRouter.get("/:id", getBookById);
-bookRouter.put("/:id", updateBook);
+bookRouter.put("/:id",authenticate, upload.fields([{ name: "coverImage", maxCount: 1 },
+{ name: "file", maxCount: 1 }]), updateBook);
 bookRouter.delete("/:id", deleteBook);
 
 export default bookRouter;

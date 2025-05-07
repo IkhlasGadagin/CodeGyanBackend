@@ -125,6 +125,8 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     console.log(id, "id of the book");
     const { title, description, price, genre } = req.body;
+    console.log(title, description, price, genre, "the data from the body");
+    // console.log(req.files, "the files from the request");
 
     try {
         const findBook = await Book.findById(id);
@@ -146,7 +148,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
             const fileName = files?.coverImage[0].filename;
             const coverImageMimeType = files?.coverImage[0].mimetype.split("/").at(-1);
 
-            const filePath = path.resolve(__dirname, '../../public/data/uploads' + fileName);
+            const filePath = path.resolve(__dirname, '../../public/data/uploads', fileName);
             //Like ikhas.png mens that below code
             completeCoverImage = fileName;
             const uploadResult = await cloudinary.uploader.upload(filePath, {
@@ -162,7 +164,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
         let completeFileName = "";
         if (files?.file) {
             const bookFileName = files?.file[0].filename;
-            const bookFilePath = path.resolve(__dirname, '../../public/data/uploads' + bookFileName);
+            const bookFilePath = path.resolve(__dirname, '../../public/data/uploads', bookFileName);
             completeFileName = bookFileName;
             const bookFileUpload = await cloudinary.uploader.upload(bookFilePath, {
                 resource_type: "raw",
@@ -185,7 +187,7 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
             book: updateBook
         });
     } catch (error) {
-        return next(createHttpError(500, "Error while updating book"))
+        return next(createHttpError(500, `Error while updating book ${error}`))
     }
 
 }
