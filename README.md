@@ -2,7 +2,7 @@
 
 A robust RESTful API for an eBook platform, built with Node.js, Express, TypeScript, and MongoDB. This project allows users to register, log in, and manage eBooks (CRUD operations), including file uploads to Cloudinary.
 
-![CodersGyan eBook API Demo](./assets/onGithub.png)
+![CodersGyan eBook API Demo](./src/assets/onGithub.png)
 
 ## Table of Contents
 
