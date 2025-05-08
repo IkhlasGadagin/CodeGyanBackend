@@ -239,7 +239,7 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
      //delete the book from the database
       await Book.deleteOne({_id:id});
  
-    return res.status(204).json({
+    res.status(204).json({
          message: "Book deleted successfully"
      });
    } catch (error) {

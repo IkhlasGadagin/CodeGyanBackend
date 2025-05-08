@@ -1,5 +1,5 @@
 import express from "express";
-import { createBook, getAllBooks, getBookById, updateBook, deleteBook } from "./bookController";
+import { createBook, getAllBooks, getBookById, updateBook,deleteBook } from "./bookController";
 import path from "node:path";
 import multer from "multer";
 import authenticate from "../middlewares/authenticate";
